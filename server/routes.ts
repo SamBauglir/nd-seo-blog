@@ -8,6 +8,7 @@ import multer from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
 import path from 'path';
+import { generateSitemap, generateRobotsTxt } from "./sitemap";
 
 // Configure multer for file uploads
 const uploadsDir = path.join(process.cwd(), 'uploads');
@@ -287,6 +288,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ message: "Post deleted successfully" });
     } catch (error: any) {
       res.status(500).json({ message: error.message });
+    }
+  });
+
+  // SEO Routes
+  app.get("/sitemap.xml", async (req, res) => {
+    try {
+      const baseUrl = req.protocol + '://' + req.get('host');
+      const sitemap = await generateSitemap(baseUrl);
+      res.set('Content-Type', 'text/xml');
+      res.send(sitemap);
+    } catch (error) {
+      console.error("Error generating sitemap:", error);
+      res.status(500).json({ message: "Failed to generate sitemap" });
+    }
+  });
+
+  app.get("/robots.txt", async (req, res) => {
+    try {
+      const baseUrl = req.protocol + '://' + req.get('host');
+      const robots = await generateRobotsTxt(baseUrl);
+      res.set('Content-Type', 'text/plain');
+      res.send(robots);
+    } catch (error) {
+      console.error("Error generating robots.txt:", error);
+      res.status(500).json({ message: "Failed to generate robots.txt" });
     }
   });
 

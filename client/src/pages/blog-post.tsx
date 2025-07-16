@@ -4,6 +4,7 @@ import Footer from "@/components/footer";
 import { useQuery } from "@tanstack/react-query";
 import type { BlogPostWithDetails } from "@shared/schema";
 import { formatDate } from "@/lib/utils";
+import SEOHead from "@/components/seo-head";
 
 export default function BlogPost() {
   const [, params] = useRoute("/blog/:slug");
@@ -60,6 +61,17 @@ export default function BlogPost() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead 
+        title={`${post.title} - BESSEcho`}
+        description={post.excerpt || `Read about ${post.title} - Expert insights on BESS technology and energy storage solutions.`}
+        keywords={`${post.title}, BESS, battery energy storage, ${post.category.name}, renewable energy`}
+        type="article"
+        url={`https://bessecho.com/blog/${post.slug}`}
+        image={post.image || undefined}
+        author={post.author.name}
+        publishedTime={post.publishedAt.toISOString()}
+        modifiedTime={post.createdAt.toISOString()}
+      />
       <Header />
       
       {/* Article Header */}

@@ -9,6 +9,7 @@ import Footer from "@/components/footer";
 import { useQuery } from "@tanstack/react-query";
 import type { BlogPostWithDetails } from "@shared/schema";
 import { formatDate } from "@/lib/utils";
+import SEOHead from "@/components/seo-head";
 
 export default function Home() {
   const { data: featuredPosts = [], isLoading } = useQuery<BlogPostWithDetails[]>({
@@ -21,6 +22,13 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead 
+        title="BESSEcho - Master BESS Technology & Energy Storage Solutions"
+        description="Dive deep into Battery Energy Storage Systems with expert insights, cutting-edge research, and practical solutions for the renewable energy revolution."
+        keywords="BESS, battery energy storage, renewable energy, grid storage, lithium-ion, energy management, solar storage, wind power"
+        type="website"
+        url="https://bessecho.com"
+      />
       <Header />
       <Hero />
       <Stats />

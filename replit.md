@@ -89,4 +89,18 @@ The application is configured for deployment with:
 - `start`: Production server startup
 - `db:push`: Database schema synchronization
 
+## Recent Changes: Latest modifications with dates
+
+**January 16, 2025:**
+- Added comprehensive SEO optimization features
+- Created dynamic meta tags component (SEOHead) for all pages
+- Implemented XML sitemap generation at `/sitemap.xml`
+- Added robots.txt generation at `/robots.txt`
+- Integrated structured data (JSON-LD) for articles and website
+- Added Open Graph and Twitter Card meta tags
+- Made excerpt and featured image fields optional in admin panel
+- Updated database schema to allow null values for optional fields
+- Added Narada Power Source support banner to hero section
+- Prepared project for download with complete SEO foundation
+
 The architecture prioritizes developer experience with TypeScript throughout, shared schemas for type safety, and modern tooling for fast development cycles. The modular component structure and clear API boundaries make the codebase maintainable and scalable.
