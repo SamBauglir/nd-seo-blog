@@ -1,0 +1,988 @@
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BESSEcho - BESS System Knowledge &amp; Technology Blog Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#165DFF',
+            secondary: '#36D399',
+            dark: '#1E293B',
+            light: '#F8FAFC'
+          },
+          fontFamily: {
+            inter: ['Inter', 'sans-serif'],
+            roboto: ['Roboto', 'sans-serif']
+          },
+        },
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .text-shadow {
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+      .card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+    }
+  </style>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Roboto:wght@300;400;500;700&amp;display=swap" rel="stylesheet">
+</head>
+<body class="font-inter bg-light text-dark antialiased">
+  <!-- Navigation Bar -->
+  <header id="navbar" class="fixed w-full top-0 z-50 transition-all duration-300">
+    <nav class="bg-white/90 backdrop-blur-sm shadow-sm py-4 px-4 md:px-8">
+      <div class="container mx-auto flex justify-between items-center">
+        <a href="#" class="flex items-center space-x-2">
+          <div class="bg-primary text-white p-2 rounded-lg">
+            <i class="fa fa-bolt text-xl"></i>
+          </div>
+          <span class="text-xl font-bold text-primary">BESSEcho</span>
+        </a>
+        
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="#home" class="font-medium hover:text-primary transition-colors">Home</a>
+          <a href="#blog" class="font-medium hover:text-primary transition-colors">Blog</a>
+          <a href="#knowledge" class="font-medium hover:text-primary transition-colors">Knowledge</a>
+          <a href="#inquire" class="font-medium hover:text-primary transition-colors">Inquire</a>
+          <a href="#contact" class="font-medium hover:text-primary transition-colors">Contact</a>
+        </div>
+        
+        <!-- Mobile Menu Button -->
+        <button id="menu-toggle" class="md:hidden text-dark focus:outline-none">
+          <i class="fa fa-bars text-2xl"></i>
+        </button>
+      </div>
+    </nav>
+    
+    <!-- Mobile Navigation Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg absolute w-full">
+      <div class="container mx-auto py-4 px-4 flex flex-col space-y-4">
+        <a href="#home" class="font-medium hover:text-primary transition-colors py-2">Home</a>
+        <a href="#blog" class="font-medium hover:text-primary transition-colors py-2">Blog</a>
+        <a href="#knowledge" class="font-medium hover:text-primary transition-colors py-2">Knowledge</a>
+        <a href="#inquire" class="font-medium hover:text-primary transition-colors py-2">Inquire</a>
+        <a href="#contact" class="font-medium hover:text-primary transition-colors py-2">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="home" class="pt-28 pb-20 md:pt-32 md:pb-24 bg-gradient-to-br from-primary/5 to-secondary/5">
+    <div class="container mx-auto px-4 md:px-8">
+      <div class="flex flex-col md:flex-row items-center">
+        <div class="md:w-1/2 mb-10 md:mb-0">
+          <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold leading-tight text-dark mb-4">
+            BESS System Knowledge &amp;<br><span class="text-primary">Technology Blog Platform</span>
+          </h1>
+          <p class="text-lg md:text-xl text-gray-600 mb-8 max-w-lg">
+            Explore cutting-edge BESS system technologies, stay updated with industry trends, and solve energy storage challenges.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <a href="#blog" class="bg-primary hover:bg-primary/90 text-white font-medium py-3 px-8 rounded-lg transition-all shadow-lg hover:shadow-primary/30">Browse Blogs</a>
+            <a href="#inquire" class="bg-white hover:bg-gray-50 text-primary border border-primary font-medium py-3 px-8 rounded-lg transition-all">
+              Consult Experts
+            </a>
+          </div>
+          <div class="flex items-center mt-10 space-x-6">
+            <div class="flex -space-x-2">
+              <img src="https://picsum.photos/id/1005/40/40" alt="User Avatar" class="w-10 h-10 rounded-full border-2 border-white">
+              <img src="https://picsum.photos/id/1012/40/40" alt="User Avatar" class="w-10 h-10 rounded-full border-2 border-white">
+              <img src="https://picsum.photos/id/1027/40/40" alt="User Avatar" class="w-10 h-10 rounded-full border-2 border-white">
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Join <span class="font-semibold">5,000+</span> professionals</p>
+              <div class="flex items-center mt-1">
+                <div class="flex text-yellow-400">
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star-half-o"></i>
+                </div>
+                <span class="text-sm text-gray-600 ml-1">4.8/5</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="md:w-1/2 relative">
+          <div class="relative z-10 rounded-xl overflow-hidden shadow-2xl">
+            <img src="https://picsum.photos/id/180/600/400" alt="BESS System Overview" class="w-full h-auto">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
+              <div class="p-6">
+                <span class="bg-primary/90 text-white text-xs font-semibold px-3 py-1 rounded-full">Latest Article</span>
+                <h3 class="text-white text-xl font-bold mt-2">Future Development Trends of BESS Systems</h3>
+                <p class="text-white/80 text-sm mt-1">Exploring innovations and breakthroughs in energy storage technology</p>
+              </div>
+            </div>
+          </div>
+          <!-- Decorative Elements -->
+          <div class="absolute -top-6 -right-6 w-40 h-40 bg-secondary/20 rounded-full -z-10"></div>
+          <div class="absolute -bottom-10 -left-10 w-60 h-60 bg-primary/10 rounded-full -z-10"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Statistics -->
+  <section class="py-12 bg-white">
+    <div class="container mx-auto px-4 md:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <div class="p-6 rounded-xl bg-primary/5">
+          <div class="text-3xl md:text-4xl font-bold text-primary mb-2" id="stats-posts">0</div>
+          <p class="text-gray-600">Blog Posts</p>
+        </div>
+        <div class="p-6 rounded-xl bg-secondary/5">
+          <div class="text-3xl md:text-4xl font-bold text-secondary mb-2" id="stats-readers">0</div>
+          <p class="text-gray-600">Active Readers</p>
+        </div>
+        <div class="p-6 rounded-xl bg-purple-50">
+          <div class="text-3xl md:text-4xl font-bold text-purple-600 mb-2" id="stats-experts">0</div>
+          <p class="text-gray-600">Industry Experts</p>
+        </div>
+        <div class="p-6 rounded-xl bg-amber-50">
+          <div class="text-3xl md:text-4xl font-bold text-amber-600 mb-2" id="stats-inquiries">0</div>
+          <p class="text-gray-600">Inquiries Resolved</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Section -->
+  <section id="blog" class="py-20 bg-gray-50">
+    <div class="container mx-auto px-4 md:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">Latest <span class="text-primary">Blog Articles</span></h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">Explore our curated collection of BESS system technology articles, industry insights, and cutting-edge research</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Blog Post Card 1 -->
+        <article class="bg-white rounded-xl overflow-hidden shadow-md card-hover">
+          <div class="relative">
+            <img src="https://picsum.photos/id/160/600/400" alt="BESS System Architecture" class="w-full h-56 object-cover">
+            <div class="absolute top-4 left-4">
+              <span class="bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full">Technology</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center text-gray-500 text-sm mb-3">
+              <span><i class="fa fa-calendar-o mr-1"></i> June 15, 2025</span>
+              <span class="mx-2">•</span>
+              <span><i class="fa fa-user-o mr-1"></i> Li Ming</span>
+            </div>
+            <h3 class="text-xl font-bold mb-3 hover:text-primary transition-colors">
+              <a href="#">Best Practices for BESS System Architecture Design</a>
+            </h3>
+            <p class="text-gray-600 mb-4">This article delves into the key factors and best practices for BESS system architecture design, helping engineers build efficient and reliable energy storage systems.</p>
+            <div class="flex justify-between items-center">
+              <a href="#" class="text-primary font-medium hover:underline">Read More</a>
+              <div class="flex items-center text-gray-500">
+                <span><i class="fa fa-eye mr-1"></i> 1,245</span>
+                <span class="mx-2">•</span>
+                <span><i class="fa fa-comment-o mr-1"></i> 24</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        
+        <!-- Blog Post Card 2 -->
+        <article class="bg-white rounded-xl overflow-hidden shadow-md card-hover">
+          <div class="relative">
+            <img src="https://picsum.photos/id/119/600/400" alt="Battery Management System" class="w-full h-56 object-cover">
+            <div class="absolute top-4 left-4">
+              <span class="bg-secondary text-white text-xs font-semibold px-3 py-1 rounded-full">Management</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center text-gray-500 text-sm mb-3">
+              <span><i class="fa fa-calendar-o mr-1"></i> June 28, 2025</span>
+              <span class="mx-2">•</span>
+              <span><i class="fa fa-user-o mr-1"></i> Zhang Wei</span>
+            </div>
+            <h3 class="text-xl font-bold mb-3 hover:text-primary transition-colors">
+              <a href="#">Key Technologies for Battery Management Systems (BMS)</a>
+            </h3>
+            <p class="text-gray-600 mb-4">Understand the core technologies and algorithms of modern battery management systems and how they improve battery performance and extend service life.</p>
+            <div class="flex justify-between items-center">
+              <a href="#" class="text-primary font-medium hover:underline">Read More</a>
+              <div class="flex items-center text-gray-500">
+                <span><i class="fa fa-eye mr-1"></i> 987</span>
+                <span class="mx-2">•</span>
+                <span><i class="fa fa-comment-o mr-1"></i> 18</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        
+        <!-- Blog Post Card 3 -->
+        <article class="bg-white rounded-xl overflow-hidden shadow-md card-hover">
+          <div class="relative">
+            <img src="https://picsum.photos/id/129/600/400" alt="Energy Storage Market" class="w-full h-56 object-cover">
+            <div class="absolute top-4 left-4">
+              <span class="bg-amber-500 text-white text-xs font-semibold px-3 py-1 rounded-full">Market</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center text-gray-500 text-sm mb-3">
+              <span><i class="fa fa-calendar-o mr-1"></i> July 5, 2025</span>
+              <span class="mx-2">•</span>
+              <span><i class="fa fa-user-o mr-1"></i> Wang Fang</span>
+            </div>
+            <h3 class="text-xl font-bold mb-3 hover:text-primary transition-colors">
+              <a href="#">Energy Storage Market Trends and Forecasts for 2025</a>
+            </h3>
+            <p class="text-gray-600 mb-4">Analyze the latest trends in the global energy storage market, including policy environment, technological innovations, and market size forecasts to help businesses seize market opportunities.</p>
+            <div class="flex justify-between items-center">
+              <a href="#" class="text-primary font-medium hover:underline">Read More</a>
+              <div class="flex items-center text-gray-500">
+                <span><i class="fa fa-eye mr-1"></i> 1,562</span>
+                <span class="mx-2">•</span>
+                <span><i class="fa fa-comment-o mr-1"></i> 36</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+      
+      <div class="text-center mt-12">
+        <a href="#" class="inline-flex items-center justify-center bg-white hover:bg-gray-50 text-primary border border-primary font-medium py-3 px-8 rounded-lg transition-all">
+          View More Articles <i class="fa fa-long-arrow-right ml-2"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Knowledge Center -->
+  <section id="knowledge" class="py-20 bg-white">
+    <div class="container mx-auto px-4 md:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">BESS <span class="text-primary">Knowledge Center</span></h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">Deep dive into the core concepts, technical principles, and application cases of BESS systems</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Knowledge Card 1 -->
+        <div class="bg-gray-50 rounded-xl p-6 card-hover">
+          <div class="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mb-5">
+            <i class="fa fa-book text-2xl text-primary"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Basic Concepts</h3>
+          <p class="text-gray-600 mb-4">Understand the fundamental concepts, components, and working principles of BESS systems, ideal for beginners.</p>
+          <ul class="space-y-2 mb-6">
+            <li class="flex items-start">
+              <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+              <span>What is a BESS system?</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+              <span>Main components of BESS</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+              <span>Energy storage technology classification</span>
+            </li>
+          </ul>
+          <a href="#" class="text-primary font-medium hover:underline inline-flex items-center">
+            Explore More <i class="fa fa-arrow-right ml-2"></i>
+          </a>
+        </div>
+        
+        <!-- Knowledge Card 2 -->
+        <div class="bg-gray-50 rounded-xl p-6 card-hover">
+          <div class="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mb-5">
+            <i class="fa fa-cogs text-2xl text-primary"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Technical Principles</h3>
+          <p class="text-gray-600 mb-4">In-depth study of the key technologies, control strategies, and energy management algorithms of BESS systems.</p>
+          <ul class="space-y-2 mb-6">
+            <li class="flex items-start">
+              <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+              <span>Battery technology and chemical principles</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+              <span>Power Conversion System (PCS)</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+              <span>Energy Management System (EMS)</span>
+            </li>
+          </ul>
+          <a href="#" class="text-primary font-medium hover:underline inline-flex items-center">
+            Explore More <i class="fa fa-arrow-right ml-2"></i>
+          </a>
+        </div>
+        
+        <!-- Knowledge Card 3 -->
+        <div class="bg-gray-50 rounded-xl p-6 card-hover">
+          <div class="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mb-5">
+            <i class="fa fa-line-chart text-2xl text-primary"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Application Cases</h3>
+          <p class="text-gray-600 mb-4">Learn about the practical applications and successful case studies of BESS systems in various scenarios.</p>
+          <ul class="space-y-2 mb-6">
+            <li class="flex items-start">
+              <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+              <span>Grid-side energy storage applications</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+              <span>Renewable energy配套 energy storage</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+              <span>Commercial and industrial energy storage solutions</span>
+            </li>
+          </ul>
+          <a href="#" class="text-primary font-medium hover:underline inline-flex items-center">
+            Explore More <i class="fa fa-arrow-right ml-2"></i>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Data Visualization -->
+      <div class="mt-20 bg-gray-50 rounded-xl p-8">
+        <h3 class="text-xl font-bold mb-6">Energy Storage Technology Market Share Analysis</h3>
+        <div class="h-80">
+          <canvas id="storageMarketChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Expert Team -->
+  <section class="py-20 bg-gray-50">
+    <div class="container mx-auto px-4 md:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">Our <span class="text-primary">Expert Team</span></h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">Meet our industry experts with extensive experience and expertise in BESS systems</p>
+      </div>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Expert 1 -->
+        <div class="bg-white rounded-xl overflow-hidden shadow-md card-hover">
+          <div class="relative">
+            <img src="https://picsum.photos/id/1005/400/400" alt="Expert" class="w-full h-64 object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 hover:opacity-100 transition-opacity flex items-end p-6">
+              <div>
+                <h4 class="text-white text-lg font-bold">Dr. Li Ming</h4>
+                <p class="text-white/80 text-sm">Power Electronics and Energy Storage Systems Expert</p>
+                <div class="flex space-x-3 mt-3">
+                  <a href="#" class="text-white hover:text-primary transition-colors">
+                    <i class="fa fa-linkedin"></i>
+                  </a>
+                  <a href="#" class="text-white hover:text-primary transition-colors">
+                    <i class="fa fa-twitter"></i>
+                  </a>
+                  <a href="#" class="text-white hover:text-primary transition-colors">
+                    <i class="fa fa-envelope"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="p-6">
+            <h4 class="text-lg font-bold mb-1">Dr. Li Ming</h4>
+            <p class="text-primary text-sm mb-3">Power Electronics and Energy Storage Systems Expert</p>
+            <p class="text-gray-600 text-sm">With 20 years of experience in BESS system design and development, has served as a technical director in several well-known enterprises.</p>
+          </div>
+        </div>
+        
+        <!-- Expert 2 -->
+        <div class="bg-white rounded-xl overflow-hidden shadow-md card-hover">
+          <div class="relative">
+            <img src="https://picsum.photos/id/1012/400/400" alt="Expert" class="w-full h-64 object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 hover:opacity-100 transition-opacity flex items-end p-6">
+              <div>
+                <h4 class="text-white text-lg font-bold">Zhang Wei</h4>
+                <p class="text-white/80 text-sm">Battery Technology and Management Expert</p>
+                <div class="flex space-x-3 mt-3">
+                  <a href="#" class="text-white hover:text-primary transition-colors">
+                    <i class="fa fa-linkedin"></i>
+                  </a>
+                  <a href="#" class="text-white hover:text-primary transition-colors">
+                    <i class="fa fa-twitter"></i>
+                  </a>
+                  <a href="#" class="text-white hover:text-primary transition-colors">
+                    <i class="fa fa-envelope"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="p-6">
+            <h4 class="text-lg font-bold mb-1">Zhang Wei</h4>
+            <p class="text-primary text-sm mb-3">Battery Technology and Management Expert</p>
+            <p class="text-gray-600 text-sm">Specializes in battery technology research and application, with multiple patents in battery management system development.</p>
+          </div>
+        </div>
+        
+        <!-- Expert 3 -->
+        <div class="bg-white rounded-xl overflow-hidden shadow-md card-hover">
+          <div class="relative">
+            <img src="https://picsum.photos/id/1027/400/400" alt="Expert" class="w-full h-64 object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 hover:opacity-100 transition-opacity flex items-end p-6">
+              <div>
+                <h4 class="text-white text-lg font-bold">Wang Fang</h4>
+                <p class="text-white/80 text-sm">Energy Market and Policy Analyst</p>
+                <div class="flex space-x-3 mt-3">
+                  <a href="#" class="text-white hover:text-primary transition-colors">
+                    <i class="fa fa-linkedin"></i>
+                  </a>
+                  <a href="#" class="text-white hover:text-primary transition-colors">
+                    <i class="fa fa-twitter"></i>
+                  </a>
+                  <a href="#" class="text-white hover:text-primary transition-colors">
+                    <i class="fa fa-envelope"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="p-6">
+            <h4 class="text-lg font-bold mb-1">Wang Fang</h4>
+            <p class="text-primary text-sm mb-3">Energy Market and Policy Analyst</p>
+            <p class="text-gray-600 text-sm">Has extensive experience in energy policy, market analysis, and strategic planning, and has participated in several national-level energy projects.</p>
+          </div>
+        </div>
+        
+        <!-- Expert 4 -->
+        <div class="bg-white rounded-xl overflow-hidden shadow-md card-hover">
+          <div class="relative">
+            <img src="https://picsum.photos/id/1074/400/400" alt="Expert" class="w-full h-64 object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 hover:opacity-100 transition-opacity flex items-end p-6">
+              <div>
+                <h4 class="text-white text-lg font-bold">Chen Qiang</h4>
+                <p class="text-white/80 text-sm">System Integration and Optimization Expert</p>
+                <div class="flex space-x-3 mt-3">
+                  <a href="#" class="text-white hover:text-primary transition-colors">
+                    <i class="fa fa-linkedin"></i>
+                  </a>
+                  <a href="#" class="text-white hover:text-primary transition-colors">
+                    <i class="fa fa-twitter"></i>
+                  </a>
+                  <a href="#" class="text-white hover:text-primary transition-colors">
+                    <i class="fa fa-envelope"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="p-6">
+            <h4 class="text-lg font-bold mb-1">Chen Qiang</h4>
+            <p class="text-primary text-sm mb-3">System Integration and Optimization Expert</p>
+            <p class="text-gray-600 text-sm">Specializes in BESS system integration and optimization, with extensive experience in large-scale energy storage project implementation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Inquiry Form -->
+  <section id="inquire" class="py-20 bg-primary/5">
+    <div class="container mx-auto px-4 md:px-8">
+      <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-2">
+          <div class="p-8 md:p-12 lg:p-16">
+            <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-6">Submit an <span class="text-primary">Inquiry</span></h2>
+            <p class="text-gray-600 mb-8">Have any questions or requirements about BESS systems? Please fill out the form below, and our experts will contact you as soon as possible.</p>
+            
+            <form id="inquire-form" class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                  <input type="text" id="name" name="name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors" placeholder="Please enter your name" required="">
+                </div>
+                <div>
+                  <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                  <input type="email" id="email" name="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors" placeholder="Please enter your email" required="">
+                </div>
+              </div>
+              
+              <div>
+                <label for="company" class="block text-sm font-medium text-gray-700 mb-1">Company</label>
+                <input type="text" id="company" name="company" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors" placeholder="Please enter your company name">
+              </div>
+              
+              <div>
+                <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">Inquiry Subject</label>
+                <select id="subject" name="subject" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors">
+                  <option value="" disabled="" selected="">Please select a subject</option>
+                  <option value="Technical Consultation">Technical Consultation</option>
+                  <option value="Product Information">Product Information</option>
+                  <option value="Project Cooperation">Project Cooperation</option>
+                  <option value="Training Needs">Training Needs</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              
+              <div>
+                <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Inquiry Details</label>
+                <textarea id="message" name="message" rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors" placeholder="Please describe your inquiry in detail" required=""></textarea>
+              </div>
+              
+              <div class="flex items-start">
+                <div class="flex items-center h-5">
+                  <input id="privacy" name="privacy" type="checkbox" class="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary/50" required="">
+                </div>
+                <div class="ml-3 text-sm">
+                  <label for="privacy" class="text-gray-600">I agree to the processing of my personal data in accordance with the <a href="#" class="text-primary hover:underline">Privacy Policy</a></label>
+                </div>
+              </div>
+              
+              <button type="submit" class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg transition-all shadow-lg hover:shadow-primary/30">
+                Submit Inquiry
+              </button>
+            </form>
+          </div>
+          
+          <div class="hidden lg:block relative">
+            <img src="https://picsum.photos/id/164/800/1200" alt="BESS System" class="absolute inset-0 w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-r from-primary/80 to-primary/60 flex flex-col justify-end p-16">
+              <h3 class="text-white text-2xl font-bold mb-4">Why Choose Us?</h3>
+              <ul class="space-y-4 text-white/90">
+                <li class="flex items-start">
+                  <i class="fa fa-check-circle text-secondary mt-1 mr-3"></i>
+                  <span>10+ years of BESS system expertise</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-check-circle text-secondary mt-1 mr-3"></i>
+                  <span>Technical support from industry-leading experts</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-check-circle text-secondary mt-1 mr-3"></i>
+                  <span>Customized solutions</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-check-circle text-secondary mt-1 mr-3"></i>
+                  <span>24/7 professional service support</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-check-circle text-secondary mt-1 mr-3"></i>
+                  <span>Successfully served over 500 enterprises</span>
+                </li>
+              </ul>
+              
+              <div class="mt-12 pt-8 border-t border-white/30">
+                <h4 class="text-white text-lg font-bold mb-4">Contact Us</h4>
+                <div class="space-y-3">
+                  <div class="flex items-start">
+                    <i class="fa fa-envelope text-secondary mt-1 mr-3"></i>
+                    <span class="text-white/90">info@bessecho.com</span>
+                  </div>
+                  <div class="flex items-start">
+                    <i class="fa fa-phone text-secondary mt-1 mr-3"></i>
+                    <span class="text-white/90">+86 10 8888 8888</span>
+                  </div>
+                  <div class="flex items-start">
+                    <i class="fa fa-map-marker text-secondary mt-1 mr-3"></i>
+                    <span class="text-white/90">Zhongguancun Science Park, Haidian District, Beijing</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact and Subscription -->
+  <section id="contact" class="py-20 bg-white">
+    <div class="container mx-auto px-4 md:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2">
+          <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-6">Subscribe to Our <span class="text-primary">Blog</span></h2>
+          <p class="text-gray-600 mb-8">Subscribe to our blog to receive the latest BESS system technology articles, industry news, and expert insights.</p>
+          
+          <form class="flex flex-col sm:flex-row gap-4">
+            <input type="email" placeholder="Enter your email address" class="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors">
+            <button type="submit" class="bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg transition-all whitespace-nowrap">
+              Subscribe Now
+            </button>
+          </form>
+          
+          <p class="text-gray-500 text-sm mt-4">We respect your privacy and will never share your information with third parties.</p>
+          
+          <div class="mt-12">
+            <h3 class="text-xl font-bold mb-6">Follow Us</h3>
+            <div class="flex space-x-4">
+              <a href="#" class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all">
+                <i class="fa fa-linkedin"></i>
+              </a>
+              <a href="#" class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all">
+                <i class="fa fa-twitter"></i>
+              </a>
+              <a href="#" class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all">
+                <i class="fa fa-facebook"></i>
+              </a>
+              <a href="#" class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all">
+                <i class="fa fa-youtube-play"></i>
+              </a>
+              <a href="#" class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all">
+                <i class="fa fa-weixin"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-gray-50 rounded-xl p-8">
+          <h3 class="text-xl font-bold mb-6">Contact <span class="text-primary">Us</span></h3>
+          <div class="space-y-6">
+            <div class="flex items-start">
+              <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary mr-4">
+                <i class="fa fa-map-marker"></i>
+              </div>
+              <div>
+                <h4 class="font-medium mb-1">Address</h4>
+                <p class="text-gray-600">Building 8, Zhongguancun Science Park, Haidian District, Beijing</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start">
+              <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary mr-4">
+                <i class="fa fa-phone"></i>
+              </div>
+              <div>
+                <h4 class="font-medium mb-1">Phone</h4>
+                <p class="text-gray-600">+86 10 8888 8888</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start">
+              <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary mr-4">
+                <i class="fa fa-envelope"></i>
+              </div>
+              <div>
+                <h4 class="font-medium mb-1">Email</h4>
+                <p class="text-gray-600">info@bessecho.com</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start">
+              <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary mr-4">
+                <i class="fa fa-clock-o"></i>
+              </div>
+              <div>
+                <h4 class="font-medium mb-1">Working Hours</h4>
+                <p class="text-gray-600">Monday to Friday: 9:00 - 18:00</p>
+                <p class="text-gray-600">Saturday to Sunday: Closed</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white pt-16 pb-8">
+    <div class="container mx-auto px-4 md:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div>
+          <div class="flex items-center space-x-2 mb-6">
+            <div class="bg-white p-2 rounded-lg">
+              <i class="fa fa-bolt text-xl text-primary"></i>
+            </div>
+            <span class="text-xl font-bold">BESSEcho</span>
+          </div>
+          <p class="text-gray-400 mb-6">BESSEcho is a knowledge sharing platform dedicated to BESS system technology and applications, committed to promoting the development and innovation of energy storage technologies.</p>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-white transition-colors">
+              <i class="fa fa-linkedin"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors">
+              <i class="fa fa-twitter"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors">
+              <i class="fa fa-facebook"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors">
+              <i class="fa fa-youtube-play"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-bold mb-6">Quick Links</h4>
+          <ul class="space-y-3">
+            <li><a href="#home" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+            <li><a href="#blog" class="text-gray-400 hover:text-white transition-colors">Blog</a></li>
+            <li><a href="#knowledge" class="text-gray-400 hover:text-white transition-colors">Knowledge Center</a></li>
+            <li><a href="#inquire" class="text-gray-400 hover:text-white transition-colors">Inquire</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-bold mb-6">Knowledge Categories</h4>
+          <ul class="space-y-3">
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">BESS System Basics</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Battery Technology</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">PCS and Power Electronics</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Energy Management Systems</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">System Integration and Optimization</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Industry Application Cases</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-bold mb-6">Contact Us</h4>
+          <ul class="space-y-3">
+            <li class="flex items-start">
+              <i class="fa fa-map-marker text-primary mt-1 mr-3"></i>
+              <span class="text-gray-400">Building 8, Zhongguancun Science Park, Haidian District, Beijing</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-phone text-primary mt-1 mr-3"></i>
+              <span class="text-gray-400">+86 10 8888 8888</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-envelope text-primary mt-1 mr-3"></i>
+              <span class="text-gray-400">info@bessecho.com</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-clock-o text-primary mt-1 mr-3"></i>
+              <span class="text-gray-400">Monday to Friday: 9:00 - 18:00</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-800 pt-8">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <p class="text-gray-500 text-sm mb-4 md:mb-0">© 2025 BESSEcho. All rights reserved.</p>
+          <div class="flex space-x-6">
+            <a href="#" class="text-gray-500 hover:text-white text-sm transition-colors">Privacy Policy</a>
+            <a href="#" class="text-gray-500 hover:text-white text-sm transition-colors">Terms of Service</a>
+            <a href="#" class="text-gray-500 hover:text-white text-sm transition-colors">Cookie Policy</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to Top Button -->
+  <button id="back-to-top" class="fixed bottom-8 right-8 bg-primary text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg opacity-0 invisible transition-all z-50">
+    <i class="fa fa-arrow-up"></i>
+  </button>
+
+  <!-- JavaScript -->
+  <script>
+    // Navbar Scroll Effect
+    const navbar = document.getElementById('navbar');
+    const backToTop = document.getElementById('back-to-top');
+    
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 50) {
+        navbar.classList.add('bg-white', 'shadow-md');
+        navbar.classList.remove('bg-white/90');
+      } else {
+        navbar.classList.remove('bg-white', 'shadow-md');
+        navbar.classList.add('bg-white/90');
+      }
+      
+      if (window.scrollY > 300) {
+        backToTop.classList.remove('opacity-0', 'invisible');
+        backToTop.classList.add('opacity-100', 'visible');
+      } else {
+        backToTop.classList.add('opacity-0', 'invisible');
+        backToTop.classList.remove('opacity-100', 'visible');
+      }
+    });
+    
+    // Mobile Menu Toggle
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    menuToggle.addEventListener('click', function() {
+      mobileMenu.classList.toggle('hidden');
+    });
+    
+    // Smooth Scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+          
+          // Close mobile menu
+          if (!mobileMenu.classList.contains('hidden')) {
+            mobileMenu.classList.add('hidden');
+          }
+        }
+      });
+    });
+    
+    // Back to Top Button
+    backToTop.addEventListener('click', function() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // Form Submission
+    const inquireForm = document.getElementById('inquire-form');
+    if (inquireForm) {
+      inquireForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Simulate form submission
+        const submitButton = this.querySelector('button[type="submit"]');
+        const originalText = submitButton.innerHTML;
+        
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<i class="fa fa-spinner fa-spin mr-2"></i> Submitting...';
+        
+        setTimeout(() => {
+          // Show success message
+          const formContent = this.innerHTML;
+          this.innerHTML = `
+            <div class="text-center py-8">
+              <div class="w-16 h-16 bg-secondary/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fa fa-check text-2xl text-secondary"></i>
+              </div>
+              <h3 class="text-xl font-bold mb-2">Inquiry Submitted Successfully!</h3>
+              <p class="text-gray-600 mb-6">Thank you for your inquiry. Our experts will contact you within 24 hours.</p>
+              <button type="button" id="reset-form" class="bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg transition-all">
+                Return to Form
+              </button>
+            </div>
+          `;
+          
+          // Reset form button
+          document.getElementById('reset-form').addEventListener('click', function() {
+            inquireForm.innerHTML = formContent;
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalText;
+          });
+        }, 2000);
+      });
+    }
+    
+    // Statistics Animation
+    function animateValue(id, start, end, duration) {
+      const obj = document.getElementById(id);
+      if (!obj) return;
+      
+      let startTimestamp = null;
+      const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        obj.innerHTML = Math.floor(progress * (end - start) + start).toLocaleString();
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        }
+      };
+      window.requestAnimationFrame(step);
+    }
+    
+    // Check if element is in viewport
+    function isInViewport(element) {
+      const rect = element.getBoundingClientRect();
+      return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+      );
+    }
+    
+    // Trigger statistics animation when elements enter viewport
+    let statsAnimated = false;
+    window.addEventListener('scroll', function() {
+      if (!statsAnimated && isInViewport(document.getElementById('stats-posts'))) {
+        animateValue('stats-posts', 0, 128, 2000);
+        animateValue('stats-readers', 0, 5000, 2000);
+        animateValue('stats-experts', 0, 15, 2000);
+        animateValue('stats-inquiries', 0, 1200, 2000);
+        statsAnimated = true;
+      }
+    });
+    
+    // Initialize Chart
+    document.addEventListener('DOMContentLoaded', function() {
+      const ctx = document.getElementById('storageMarketChart');
+      if (ctx) {
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Lithium-ion', 'Lead-acid', 'Flow Batteries', 'Sodium-based', 'Others'],
+            datasets: [{
+              label: 'Global Energy Storage Market Share (2025)',
+              data: [65, 15, 8, 7, 5],
+              backgroundColor: [
+                'rgba(22, 93, 255, 0.8)',
+                'rgba(54, 211, 153, 0.8)',
+                'rgba(139, 92, 246, 0.8)',
+                'rgba(245, 158, 11, 0.8)',
+                'rgba(236, 72, 153, 0.8)'
+              ],
+              borderColor: [
+                'rgba(22, 93, 255, 1)',
+                'rgba(54, 211, 153, 1)',
+                'rgba(139, 92, 246, 1)',
+                'rgba(245, 158, 11, 1)',
+                'rgba(236, 72, 153, 1)'
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: 'Market Share (%)'
+                }
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: 'Technology Type'
+                }
+              }
+            }
+          }
+        });
+      }
+    });
+  </script>
+
+  </body></html>
