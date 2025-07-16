@@ -44,11 +44,6 @@ export default function Hero() {
                     className="w-12 h-12 rounded-full border-3 border-white shadow-md" 
                   />
                   <img 
-                    src="https://plus.unsplash.com/premium_photo-1664203068145-b1d7d1680f6c?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                    alt="Energy Engineer" 
-                    className="w-12 h-12 rounded-full border-3 border-white shadow-md" 
-                  />
-                  <img 
                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop&crop=face" 
                     alt="Research Scientist" 
                     className="w-12 h-12 rounded-full border-3 border-white shadow-md" 
