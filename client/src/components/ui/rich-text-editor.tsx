@@ -118,9 +118,86 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
             inlineCode: {
               class: InlineCode,
               shortcut: 'CMD+SHIFT+C'
+            },
+            linkTool: {
+              class: LinkTool,
+              config: {
+                endpoint: '/api/fetch-url'
+              }
+            },
+            image: {
+              class: ImageTool,
+              config: {
+                endpoints: {
+                  byFile: '/api/upload-image',
+                  byUrl: '/api/upload-image-by-url',
+                },
+                field: 'image',
+                types: 'image/*',
+                captionPlaceholder: 'Add caption...',
+                buttonContent: 'Select an image',
+                uploader: {
+                  uploadByFile(file: File) {
+                    return new Promise((resolve, reject) => {
+                      const formData = new FormData();
+                      formData.append('image', file);
+                      
+                      fetch('/api/upload-image', {
+                        method: 'POST',
+                        body: formData,
+                      })
+                      .then(response => response.json())
+                      .then(data => {
+                        if (data.success) {
+                          resolve({
+                            success: 1,
+                            file: {
+                              url: data.file.url,
+                              size: data.file.size,
+                              name: data.file.name,
+                            }
+                          });
+                        } else {
+                          reject(data.message || 'Upload failed');
+                        }
+                      })
+                      .catch(error => {
+                        reject('Upload failed: ' + error.message);
+                      });
+                    });
+                  },
+                  uploadByUrl(url: string) {
+                    return new Promise((resolve, reject) => {
+                      fetch('/api/upload-image-by-url', {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ url }),
+                      })
+                      .then(response => response.json())
+                      .then(data => {
+                        if (data.success) {
+                          resolve({
+                            success: 1,
+                            file: {
+                              url: data.file.url,
+                              size: data.file.size,
+                              name: data.file.name,
+                            }
+                          });
+                        } else {
+                          reject(data.message || 'Upload failed');
+                        }
+                      })
+                      .catch(error => {
+                        reject('Upload failed: ' + error.message);
+                      });
+                    });
+                  }
+                }
+              }
             }
-            // Removing LinkTool and ImageTool to prevent configuration errors
-            // They can be added back with proper endpoint configuration
           },
           onChange: async () => {
             if (editorRef.current && isMounted) {

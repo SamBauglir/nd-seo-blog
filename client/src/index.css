@@ -436,6 +436,80 @@ body {
   color: #1E293B;
 }
 
+/* Editor.js Image styles */
+.editor-image {
+  margin: 1.5rem 0;
+}
+
+.editor-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.editor-image-caption {
+  text-align: center;
+  font-style: italic;
+  color: #6b7280;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.editor-image-stretched img {
+  width: 100%;
+}
+
+.editor-image-border img {
+  border: 1px solid #e5e7eb;
+}
+
+.editor-image-background {
+  background: #f9fafb;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+/* Link preview styles */
+.editor-link-preview, .link-preview {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+  background: white;
+  text-decoration: none;
+  display: block;
+  transition: all 0.2s ease;
+}
+
+.editor-link-preview:hover, .link-preview:hover {
+  border-color: var(--bess-primary);
+  box-shadow: 0 2px 8px rgba(22, 93, 255, 0.1);
+}
+
+.editor-link-image {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.editor-link-content h4 {
+  margin: 0 0 0.5rem 0;
+  color: var(--bess-primary);
+}
+
+.editor-link-content p {
+  margin: 0 0 0.5rem 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.editor-link-content small {
+  color: #9ca3af;
+  font-size: 0.8rem;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

@@ -1,10 +1,120 @@
 import type { Express } from "express";
+import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertConsultationRequestSchema, insertNewsletterSubscriptionSchema, insertBlogPostSchema } from "@shared/schema";
 import { z } from "zod";
+import multer from 'multer';
+import { v4 as uuidv4 } from 'uuid';
+import fs from 'fs';
+import path from 'path';
+
+// Configure multer for file uploads
+const uploadsDir = path.join(process.cwd(), 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+const storage_multer = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadsDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = `${uuidv4()}-${file.originalname}`;
+    cb(null, uniqueName);
+  }
+});
+
+const upload = multer({ 
+  storage: storage_multer,
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed'));
+    }
+  }
+});
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Serve uploaded files statically
+  app.use('/uploads', express.static(uploadsDir));
+
+  // Image upload by file
+  app.post("/api/upload-image", upload.single('image'), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ success: 0, message: "No file uploaded" });
+      }
+
+      const fileUrl = `/uploads/${req.file.filename}`;
+      
+      res.json({
+        success: 1,
+        file: {
+          url: fileUrl,
+          size: req.file.size,
+          name: req.file.originalname,
+        }
+      });
+    } catch (error) {
+      console.error("File upload error:", error);
+      res.status(500).json({ success: 0, message: "Upload failed" });
+    }
+  });
+
+  // Image upload by URL
+  app.post("/api/upload-image-by-url", async (req, res) => {
+    try {
+      const { url } = req.body;
+      
+      if (!url) {
+        return res.status(400).json({ success: 0, message: "URL is required" });
+      }
+
+      // For now, we'll just return the URL as-is (external URL)
+      // In production, you might want to download and store the image locally
+      res.json({
+        success: 1,
+        file: {
+          url: url,
+          size: 0, // Unknown size for external URLs
+          name: url.split('/').pop() || 'image',
+        }
+      });
+    } catch (error) {
+      console.error("URL upload error:", error);
+      res.status(500).json({ success: 0, message: "Upload failed" });
+    }
+  });
+
+  // Link preview endpoint for LinkTool
+  app.post("/api/fetch-url", async (req, res) => {
+    try {
+      const { url } = req.body;
+      
+      if (!url) {
+        return res.status(400).json({ success: 0, message: "URL is required" });
+      }
+
+      // Simple response for link preview
+      res.json({
+        success: 1,
+        link: url,
+        meta: {
+          title: "Link",
+          description: "External link",
+          image: {
+            url: ""
+          }
+        }
+      });
+    } catch (error) {
+      console.error("URL fetch error:", error);
+      res.status(500).json({ success: 0, message: "Failed to fetch URL" });
+    }
+  });
   // Blog posts routes
   app.get("/api/blog-posts", async (req, res) => {
     try {
