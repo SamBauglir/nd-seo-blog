@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import RichTextEditor from "@/components/ui/rich-text-editor";
 import type { BlogPost, BlogPostWithDetails, Category, Author } from "@shared/schema";
 
 const postSchema = z.object({
@@ -245,12 +246,13 @@ export default function PostEditor() {
 
                   <div>
                     <Label htmlFor="content">Content</Label>
-                    <Textarea
-                      id="content"
-                      {...form.register("content")}
-                      placeholder="Write your post content here..."
-                      rows={15}
-                    />
+                    <div className="mt-2">
+                      <RichTextEditor
+                        content={form.watch("content") || ""}
+                        onChange={(content) => form.setValue("content", content)}
+                        placeholder="Write your post content here..."
+                      />
+                    </div>
                     {form.formState.errors.content && (
                       <p className="text-sm text-red-600 mt-1">
                         {form.formState.errors.content.message}

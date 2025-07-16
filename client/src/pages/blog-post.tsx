@@ -130,32 +130,8 @@ export default function BlogPost() {
               {post.excerpt}
             </div>
             
-            {/* Article body - for now showing placeholder content */}
-            <div className="space-y-6">
-              <p>
-                Battery Energy Storage Systems (BESS) represent one of the most critical technologies in our transition to renewable energy. 
-                As we move toward a more sustainable future, understanding the intricacies of these systems becomes paramount for engineers, 
-                policymakers, and industry professionals.
-              </p>
-              
-              <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">Key Technologies</h2>
-              <p>
-                Modern BESS implementations leverage advanced lithium-ion technologies, sophisticated battery management systems, 
-                and intelligent power conversion systems to deliver reliable, efficient energy storage solutions.
-              </p>
-              
-              <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">Implementation Challenges</h2>
-              <p>
-                While the technology continues to advance, several challenges remain in widespread BESS deployment, including 
-                cost optimization, safety considerations, and grid integration requirements.
-              </p>
-              
-              <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">Future Outlook</h2>
-              <p>
-                The future of BESS technology looks promising with emerging technologies like solid-state batteries, 
-                AI-powered management systems, and improved manufacturing processes driving down costs and improving performance.
-              </p>
-            </div>
+            {/* Article body from rich text editor */}
+            <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
           </div>
           
           {/* Article Footer */}
