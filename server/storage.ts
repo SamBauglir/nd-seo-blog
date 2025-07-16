@@ -25,6 +25,8 @@ import {
   type InsertConsultationRequest,
   type InsertNewsletterSubscription,
 } from "@shared/schema";
+import { db } from "./db";
+import { eq, and, desc, sql } from "drizzle-orm";
 
 export interface IStorage {
   // Categories
@@ -460,4 +462,192 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+// Database storage implementation
+export class DatabaseStorage implements IStorage {
+  async getCategories(): Promise<Category[]> {
+    return await db.select().from(categories);
+  }
+
+  async getCategoryBySlug(slug: string): Promise<Category | undefined> {
+    const [category] = await db.select().from(categories).where(eq(categories.slug, slug));
+    return category || undefined;
+  }
+
+  async getAuthors(): Promise<Author[]> {
+    return await db.select().from(authors);
+  }
+
+  async getAuthor(id: number): Promise<Author | undefined> {
+    const [author] = await db.select().from(authors).where(eq(authors.id, id));
+    return author || undefined;
+  }
+
+  async getBlogPosts(params?: { category?: string; featured?: boolean; limit?: number }): Promise<BlogPostWithDetails[]> {
+    // Build the base query
+    const baseQuery = db.select({
+      id: blogPosts.id,
+      title: blogPosts.title,
+      slug: blogPosts.slug,
+      excerpt: blogPosts.excerpt,
+      content: blogPosts.content,
+      image: blogPosts.image,
+      categoryId: blogPosts.categoryId,
+      authorId: blogPosts.authorId,
+      readTime: blogPosts.readTime,
+      views: blogPosts.views,
+      comments: blogPosts.comments,
+      likes: blogPosts.likes,
+      featured: blogPosts.featured,
+      publishedAt: blogPosts.publishedAt,
+      createdAt: blogPosts.createdAt,
+      category: {
+        id: categories.id,
+        name: categories.name,
+        slug: categories.slug,
+        color: categories.color,
+        icon: categories.icon,
+      },
+      author: {
+        id: authors.id,
+        name: authors.name,
+        title: authors.title,
+        bio: authors.bio,
+        avatar: authors.avatar,
+        experience: authors.experience,
+      },
+    })
+    .from(blogPosts)
+    .leftJoin(categories, eq(blogPosts.categoryId, categories.id))
+    .leftJoin(authors, eq(blogPosts.authorId, authors.id))
+    .orderBy(desc(blogPosts.publishedAt));
+
+    // Execute with different filters based on parameters
+    let results;
+    if (params?.category && params?.featured) {
+      results = await baseQuery
+        .where(and(eq(categories.slug, params.category), eq(blogPosts.featured, true)))
+        .limit(params.limit || 100);
+    } else if (params?.category) {
+      results = await baseQuery
+        .where(eq(categories.slug, params.category))
+        .limit(params.limit || 100);
+    } else if (params?.featured) {
+      results = await baseQuery
+        .where(eq(blogPosts.featured, true))
+        .limit(params.limit || 100);
+    } else {
+      results = await baseQuery.limit(params?.limit || 100);
+    }
+
+    return results.map(row => ({
+      id: row.id,
+      title: row.title,
+      slug: row.slug,
+      excerpt: row.excerpt,
+      content: row.content,
+      image: row.image,
+      categoryId: row.categoryId,
+      authorId: row.authorId,
+      readTime: row.readTime,
+      views: row.views,
+      comments: row.comments,
+      likes: row.likes,
+      featured: row.featured,
+      publishedAt: row.publishedAt,
+      createdAt: row.createdAt,
+      category: row.category!,
+      author: row.author!,
+    }));
+  }
+
+  async getBlogPost(slug: string): Promise<BlogPostWithDetails | undefined> {
+    const [result] = await db.select({
+      id: blogPosts.id,
+      title: blogPosts.title,
+      slug: blogPosts.slug,
+      excerpt: blogPosts.excerpt,
+      content: blogPosts.content,
+      image: blogPosts.image,
+      categoryId: blogPosts.categoryId,
+      authorId: blogPosts.authorId,
+      readTime: blogPosts.readTime,
+      views: blogPosts.views,
+      comments: blogPosts.comments,
+      likes: blogPosts.likes,
+      featured: blogPosts.featured,
+      publishedAt: blogPosts.publishedAt,
+      createdAt: blogPosts.createdAt,
+      category: {
+        id: categories.id,
+        name: categories.name,
+        slug: categories.slug,
+        color: categories.color,
+        icon: categories.icon,
+      },
+      author: {
+        id: authors.id,
+        name: authors.name,
+        title: authors.title,
+        bio: authors.bio,
+        avatar: authors.avatar,
+        experience: authors.experience,
+      },
+    })
+    .from(blogPosts)
+    .leftJoin(categories, eq(blogPosts.categoryId, categories.id))
+    .leftJoin(authors, eq(blogPosts.authorId, authors.id))
+    .where(eq(blogPosts.slug, slug));
+
+    if (!result) return undefined;
+
+    return {
+      id: result.id,
+      title: result.title,
+      slug: result.slug,
+      excerpt: result.excerpt,
+      content: result.content,
+      image: result.image,
+      categoryId: result.categoryId,
+      authorId: result.authorId,
+      readTime: result.readTime,
+      views: result.views,
+      comments: result.comments,
+      likes: result.likes,
+      featured: result.featured,
+      publishedAt: result.publishedAt,
+      createdAt: result.createdAt,
+      category: result.category!,
+      author: result.author!,
+    };
+  }
+
+  async incrementBlogPostViews(id: number): Promise<void> {
+    await db.update(blogPosts)
+      .set({ views: sql`${blogPosts.views} + 1` })
+      .where(eq(blogPosts.id, id));
+  }
+
+  async getKnowledgeGuides(): Promise<KnowledgeGuide[]> {
+    return await db.select().from(knowledgeGuides);
+  }
+
+  async getCaseStudies(): Promise<CaseStudy[]> {
+    return await db.select().from(caseStudies);
+  }
+
+  async getExperts(): Promise<Expert[]> {
+    return await db.select().from(experts);
+  }
+
+  async createConsultationRequest(request: InsertConsultationRequest): Promise<ConsultationRequest> {
+    const [created] = await db.insert(consultationRequests).values(request).returning();
+    return created;
+  }
+
+  async subscribeNewsletter(subscription: InsertNewsletterSubscription): Promise<NewsletterSubscription> {
+    const [created] = await db.insert(newsletterSubscriptions).values(subscription).returning();
+    return created;
+  }
+}
+
+export const storage = new DatabaseStorage();

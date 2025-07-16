@@ -1,4 +1,5 @@
 import { pgTable, text, serial, integer, boolean, timestamp } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -80,6 +81,26 @@ export const newsletterSubscriptions = pgTable("newsletter_subscriptions", {
   email: text("email").notNull().unique(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
+
+// Relations
+export const categoriesRelations = relations(categories, ({ many }) => ({
+  blogPosts: many(blogPosts),
+}));
+
+export const authorsRelations = relations(authors, ({ many }) => ({
+  blogPosts: many(blogPosts),
+}));
+
+export const blogPostsRelations = relations(blogPosts, ({ one }) => ({
+  category: one(categories, {
+    fields: [blogPosts.categoryId],
+    references: [categories.id],
+  }),
+  author: one(authors, {
+    fields: [blogPosts.authorId],
+    references: [authors.id],
+  }),
+}));
 
 // Insert schemas
 export const insertCategorySchema = createInsertSchema(categories).omit({ id: true });
