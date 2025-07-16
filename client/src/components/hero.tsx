@@ -34,39 +34,7 @@ export default function Hero() {
               </a>
             </div>
             
-            {/* Social Proof */}
-            <div className="flex items-center space-x-8 pt-4">
-              <div className="flex items-center space-x-4">
-                <div className="flex -space-x-3">
-                  <img 
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=face" 
-                    alt="BESS Expert" 
-                    className="w-12 h-12 rounded-full border-3 border-white shadow-md" 
-                  />
-                  <img 
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop&crop=face" 
-                    alt="Research Scientist" 
-                    className="w-12 h-12 rounded-full border-3 border-white shadow-md" 
-                  />
-                  <div className="w-12 h-12 rounded-full border-3 border-white shadow-md bg-[#165DFF] flex items-center justify-center text-white font-bold text-sm">
-                    5K+
-                  </div>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-700">Trusted by industry leaders</p>
-                  <div className="flex items-center space-x-1">
-                    <div className="flex text-yellow-400">
-                      <i className="fa fa-star"></i>
-                      <i className="fa fa-star"></i>
-                      <i className="fa fa-star"></i>
-                      <i className="fa fa-star"></i>
-                      <i className="fa fa-star"></i>
-                    </div>
-                    <span className="text-sm text-gray-600 ml-2">4.9/5 (2,341 reviews)</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            
           </div>
           
           <div className="lg:w-1/2 relative">
