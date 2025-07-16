@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import EditorJS, { OutputData } from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import List from '@editorjs/list';
@@ -22,134 +22,167 @@ interface RichTextEditorProps {
 export default function RichTextEditor({ content, onChange, placeholder }: RichTextEditorProps) {
   const editorRef = useRef<EditorJS | null>(null);
   const holderRef = useRef<HTMLDivElement>(null);
-
-  const initializeEditor = useCallback(async () => {
-    if (!holderRef.current) return;
-
-    // Parse existing content
-    let initialData: OutputData;
-    try {
-      initialData = content ? JSON.parse(content) : { blocks: [] };
-    } catch {
-      // If content is HTML string, convert to simple paragraph
-      initialData = {
-        blocks: content ? [{
-          type: 'paragraph',
-          data: { text: content }
-        }] : []
-      };
-    }
-
-    const editor = new EditorJS({
-      holder: holderRef.current,
-      placeholder: placeholder || 'Start writing your content...',
-      data: initialData,
-      tools: {
-        header: {
-          class: Header,
-          config: {
-            levels: [1, 2, 3, 4],
-            defaultLevel: 2
-          }
-        },
-        paragraph: {
-          class: Paragraph,
-          inlineToolbar: true
-        },
-        list: {
-          class: List,
-          inlineToolbar: true,
-          config: {
-            defaultStyle: 'unordered'
-          }
-        },
-        checklist: {
-          class: Checklist,
-          inlineToolbar: true
-        },
-        quote: {
-          class: Quote,
-          inlineToolbar: true,
-          config: {
-            quotePlaceholder: 'Enter a quote',
-            captionPlaceholder: 'Quote\'s author'
-          }
-        },
-        code: {
-          class: Code,
-          config: {
-            placeholder: 'Enter code here...'
-          }
-        },
-        table: {
-          class: Table,
-          inlineToolbar: true,
-          config: {
-            rows: 2,
-            cols: 3
-          }
-        },
-        delimiter: Delimiter,
-        marker: {
-          class: Marker,
-          shortcut: 'CMD+SHIFT+M'
-        },
-        inlineCode: {
-          class: InlineCode,
-          shortcut: 'CMD+SHIFT+C'
-        },
-        linkTool: {
-          class: LinkTool,
-          config: {
-            endpoint: '/api/link-preview' // You can implement this endpoint later
-          }
-        },
-        image: {
-          class: ImageTool,
-          config: {
-            endpoints: {
-              byFile: '/api/upload-image', // You can implement this endpoint later
-              byUrl: '/api/fetch-image'
-            }
-          }
-        }
-      },
-      onChange: async () => {
-        if (editorRef.current) {
-          try {
-            const outputData = await editorRef.current.save();
-            onChange(JSON.stringify(outputData));
-          } catch (error) {
-            console.error('Saving failed:', error);
-          }
-        }
-      }
-    });
-
-    editorRef.current = editor;
-  }, [content, onChange, placeholder]);
+  const [isReady, setIsReady] = useState(false);
+  const [holderId] = useState(() => `editor-${Math.random().toString(36).substr(2, 9)}`);
 
   useEffect(() => {
+    let isMounted = true;
+
+    const initializeEditor = async () => {
+      // Destroy existing editor if it exists
+      if (editorRef.current) {
+        try {
+          await editorRef.current.destroy();
+        } catch (error) {
+          console.log('Editor destroy error (safe to ignore):', error);
+        }
+        editorRef.current = null;
+      }
+
+      if (!holderRef.current || !isMounted) return;
+
+      // Parse existing content
+      let initialData: OutputData;
+      try {
+        if (content && content.trim()) {
+          const parsed = JSON.parse(content);
+          initialData = parsed.blocks ? parsed : { blocks: [] };
+        } else {
+          initialData = { blocks: [] };
+        }
+      } catch {
+        // If content is HTML string, convert to simple paragraph
+        initialData = {
+          blocks: content && content.trim() ? [{
+            type: 'paragraph',
+            data: { text: content }
+          }] : []
+        };
+      }
+
+      try {
+        const editor = new EditorJS({
+          holder: holderId,
+          placeholder: placeholder || 'Start writing your content...',
+          data: initialData,
+          tools: {
+            header: {
+              class: Header,
+              config: {
+                levels: [1, 2, 3, 4],
+                defaultLevel: 2
+              }
+            },
+            paragraph: {
+              class: Paragraph,
+              inlineToolbar: true
+            },
+            list: {
+              class: List,
+              inlineToolbar: true,
+              config: {
+                defaultStyle: 'unordered'
+              }
+            },
+            checklist: {
+              class: Checklist,
+              inlineToolbar: true
+            },
+            quote: {
+              class: Quote,
+              inlineToolbar: true,
+              config: {
+                quotePlaceholder: 'Enter a quote',
+                captionPlaceholder: 'Quote\'s author'
+              }
+            },
+            code: {
+              class: Code,
+              config: {
+                placeholder: 'Enter code here...'
+              }
+            },
+            table: {
+              class: Table,
+              inlineToolbar: true,
+              config: {
+                rows: 2,
+                cols: 3
+              }
+            },
+            delimiter: Delimiter,
+            marker: {
+              class: Marker,
+              shortcut: 'CMD+SHIFT+M'
+            },
+            inlineCode: {
+              class: InlineCode,
+              shortcut: 'CMD+SHIFT+C'
+            }
+            // Removing LinkTool and ImageTool to prevent configuration errors
+            // They can be added back with proper endpoint configuration
+          },
+          onChange: async () => {
+            if (editorRef.current && isMounted) {
+              try {
+                const outputData = await editorRef.current.save();
+                onChange(JSON.stringify(outputData));
+              } catch (error) {
+                console.error('Saving failed:', error);
+              }
+            }
+          },
+          onReady: () => {
+            if (isMounted) {
+              setIsReady(true);
+            }
+          }
+        });
+
+        await editor.isReady;
+        
+        if (isMounted) {
+          editorRef.current = editor;
+        } else {
+          // Component unmounted before editor was ready
+          await editor.destroy();
+        }
+      } catch (error) {
+        console.error('Editor initialization failed:', error);
+      }
+    };
+
     initializeEditor();
 
     return () => {
+      isMounted = false;
+      setIsReady(false);
+      
       if (editorRef.current) {
-        editorRef.current.destroy();
+        editorRef.current.destroy().catch(error => {
+          console.log('Editor cleanup error (safe to ignore):', error);
+        });
         editorRef.current = null;
       }
     };
-  }, [initializeEditor]);
+  }, []); // Empty dependency array - only initialize once
 
   return (
     <div className="border rounded-lg overflow-hidden">
       <div 
         ref={holderRef}
+        id={holderId}
         className="min-h-[400px] p-4 prose prose-sm sm:prose lg:prose-lg max-w-none"
         style={{
           fontSize: '16px',
           lineHeight: '1.6'
         }}
       />
+      {!isReady && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-50 bg-opacity-75">
+          <div className="text-gray-500">Loading editor...</div>
+        </div>
+      )}
     </div>
   );
 }

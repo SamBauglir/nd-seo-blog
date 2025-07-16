@@ -274,7 +274,7 @@ export default function PostEditor() {
 
                   <div>
                     <Label htmlFor="content">Content</Label>
-                    <div className="mt-2">
+                    <div className="mt-2 relative">
                       <RichTextEditor
                         content={form.watch("content") || ""}
                         onChange={(content) => form.setValue("content", content)}
