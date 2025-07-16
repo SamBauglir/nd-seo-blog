@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertConsultationRequestSchema, insertNewsletterSubscriptionSchema } from "@shared/schema";
+import { insertConsultationRequestSchema, insertNewsletterSubscriptionSchema, insertBlogPostSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -112,6 +112,71 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       console.error("Error subscribing to newsletter:", error);
       res.status(500).json({ message: "Failed to subscribe to newsletter" });
+    }
+  });
+
+  // CMS Routes for managing blog posts
+  app.get("/api/authors", async (req, res) => {
+    try {
+      const authors = await storage.getAuthors();
+      res.json(authors);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/blog-posts", async (req, res) => {
+    try {
+      const result = insertBlogPostSchema.safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).json({ message: "Invalid data", errors: result.error.issues });
+      }
+
+      const post = await storage.createBlogPost(result.data);
+      res.json(post);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.put("/api/blog-posts/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid post ID" });
+      }
+
+      const result = insertBlogPostSchema.safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).json({ message: "Invalid data", errors: result.error.issues });
+      }
+
+      const post = await storage.updateBlogPost(id, result.data);
+      if (!post) {
+        return res.status(404).json({ message: "Post not found" });
+      }
+
+      res.json(post);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.delete("/api/blog-posts/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid post ID" });
+      }
+
+      const success = await storage.deleteBlogPost(id);
+      if (!success) {
+        return res.status(404).json({ message: "Post not found" });
+      }
+
+      res.json({ message: "Post deleted successfully" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
     }
   });
 

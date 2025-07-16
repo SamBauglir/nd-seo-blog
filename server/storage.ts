@@ -41,6 +41,9 @@ export interface IStorage {
   getBlogPosts(params?: { category?: string; featured?: boolean; limit?: number }): Promise<BlogPostWithDetails[]>;
   getBlogPost(slug: string): Promise<BlogPostWithDetails | undefined>;
   incrementBlogPostViews(id: number): Promise<void>;
+  createBlogPost(post: InsertBlogPost): Promise<BlogPost>;
+  updateBlogPost(id: number, post: InsertBlogPost): Promise<BlogPost | undefined>;
+  deleteBlogPost(id: number): Promise<boolean>;
   
   // Knowledge Base
   getKnowledgeGuides(): Promise<KnowledgeGuide[]>;
@@ -460,6 +463,36 @@ export class MemStorage implements IStorage {
     this.newsletterSubscriptions.set(id, newsletterSubscription);
     return newsletterSubscription;
   }
+
+  async createBlogPost(post: InsertBlogPost): Promise<BlogPost> {
+    const blogPost: BlogPost = {
+      id: this.currentBlogPostId++,
+      views: 0,
+      comments: 0,
+      likes: 0,
+      createdAt: new Date(),
+      featured: false,
+      ...post,
+    };
+    this.blogPosts.set(blogPost.id, blogPost);
+    return blogPost;
+  }
+
+  async updateBlogPost(id: number, post: InsertBlogPost): Promise<BlogPost | undefined> {
+    const existingPost = this.blogPosts.get(id);
+    if (!existingPost) return undefined;
+    
+    const updatedPost: BlogPost = {
+      ...existingPost,
+      ...post,
+    };
+    this.blogPosts.set(id, updatedPost);
+    return updatedPost;
+  }
+
+  async deleteBlogPost(id: number): Promise<boolean> {
+    return this.blogPosts.delete(id);
+  }
 }
 
 // Database storage implementation
@@ -647,6 +680,24 @@ export class DatabaseStorage implements IStorage {
   async subscribeNewsletter(subscription: InsertNewsletterSubscription): Promise<NewsletterSubscription> {
     const [created] = await db.insert(newsletterSubscriptions).values(subscription).returning();
     return created;
+  }
+
+  async createBlogPost(post: InsertBlogPost): Promise<BlogPost> {
+    const [created] = await db.insert(blogPosts).values(post).returning();
+    return created;
+  }
+
+  async updateBlogPost(id: number, post: InsertBlogPost): Promise<BlogPost | undefined> {
+    const [updated] = await db.update(blogPosts)
+      .set(post)
+      .where(eq(blogPosts.id, id))
+      .returning();
+    return updated || undefined;
+  }
+
+  async deleteBlogPost(id: number): Promise<boolean> {
+    const result = await db.delete(blogPosts).where(eq(blogPosts.id, id));
+    return result.rowCount! > 0;
   }
 }
 
