@@ -1,4 +1,5 @@
 import type { BlogPostWithDetails } from "@shared/schema";
+import { formatDate } from "@/lib/utils";
 
 interface BlogCardProps {
   post: BlogPostWithDetails;
@@ -37,7 +38,7 @@ export default function BlogCard({ post }: BlogCardProps) {
       <div className="p-6">
         <div className="flex items-center text-gray-500 text-sm mb-4">
           <i className="fa fa-calendar-o mr-2"></i>
-          <span>{post.publishedAt.toLocaleDateString()}</span>
+          <span>{formatDate(post.publishedAt)}</span>
           <span className="mx-2">•</span>
           <i className="fa fa-user-o mr-2"></i>
           <span>{post.author.name}</span>

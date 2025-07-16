@@ -8,14 +8,15 @@ import ExpertConsultation from "@/components/expert-consultation";
 import Footer from "@/components/footer";
 import { useQuery } from "@tanstack/react-query";
 import type { BlogPostWithDetails } from "@shared/schema";
+import { formatDate } from "@/lib/utils";
 
 export default function Home() {
   const { data: featuredPosts = [], isLoading } = useQuery<BlogPostWithDetails[]>({
-    queryKey: ["/api/blog-posts", { featured: true, limit: 6 }],
+    queryKey: ["/api/blog-posts?featured=true&limit=6"],
   });
 
   const { data: latestPosts = [] } = useQuery<BlogPostWithDetails[]>({
-    queryKey: ["/api/blog-posts", { limit: 6 }],
+    queryKey: ["/api/blog-posts?limit=6"],
   });
 
   return (
@@ -70,7 +71,7 @@ export default function Home() {
                         <div>
                           <p className="font-semibold">{featuredPosts[0].author.name}</p>
                           <p className="text-sm text-gray-500">
-                            {featuredPosts[0].publishedAt.toLocaleDateString()}
+                            {formatDate(featuredPosts[0].publishedAt)}
                           </p>
                         </div>
                       </div>

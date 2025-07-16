@@ -149,7 +149,12 @@ export class MemStorage implements IStorage {
 
     authorData.forEach(author => {
       const id = this.currentAuthorId++;
-      this.authors.set(id, { ...author, id });
+      this.authors.set(id, { 
+        ...author, 
+        id,
+        bio: author.bio || null,
+        experience: author.experience || null
+      });
     });
 
     // Initialize blog posts
@@ -163,9 +168,7 @@ export class MemStorage implements IStorage {
         categoryId: 1, // Technology
         authorId: 1, // Dr. Sarah Chen
         readTime: 15,
-        views: 3245,
-        comments: 42,
-        likes: 156,
+
         featured: true,
         publishedAt: new Date("2024-12-15"),
       },
@@ -178,9 +181,7 @@ export class MemStorage implements IStorage {
         categoryId: 1, // Technology
         authorId: 2, // Mike Zhang
         readTime: 8,
-        views: 2341,
-        comments: 34,
-        likes: 89,
+
         featured: false,
         publishedAt: new Date("2024-12-10"),
       },
@@ -193,9 +194,7 @@ export class MemStorage implements IStorage {
         categoryId: 6, // Integration
         authorId: 3, // Dr. Lisa Wang
         readTime: 12,
-        views: 1876,
-        comments: 28,
-        likes: 67,
+
         featured: false,
         publishedAt: new Date("2024-12-08"),
       },
@@ -208,9 +207,7 @@ export class MemStorage implements IStorage {
         categoryId: 2, // Management
         authorId: 4, // Alex Rodriguez
         readTime: 10,
-        views: 3124,
-        comments: 45,
-        likes: 112,
+
         featured: false,
         publishedAt: new Date("2024-12-05"),
       },
@@ -223,9 +220,7 @@ export class MemStorage implements IStorage {
         categoryId: 3, // Market Analysis
         authorId: 5, // Emma Thompson
         readTime: 6,
-        views: 1567,
-        comments: 19,
-        likes: 43,
+
         featured: false,
         publishedAt: new Date("2024-12-03"),
       },
@@ -238,9 +233,7 @@ export class MemStorage implements IStorage {
         categoryId: 7, // Manufacturing
         authorId: 6, // Robert Kim
         readTime: 9,
-        views: 987,
-        comments: 15,
-        likes: 28,
+
         featured: false,
         publishedAt: new Date("2024-12-01"),
       },
@@ -253,9 +246,7 @@ export class MemStorage implements IStorage {
         categoryId: 4, // Case Studies
         authorId: 7, // Jennifer Park
         readTime: 14,
-        views: 2456,
-        comments: 37,
-        likes: 84,
+
         featured: false,
         publishedAt: new Date("2024-11-28"),
       },
@@ -263,7 +254,15 @@ export class MemStorage implements IStorage {
 
     blogPostData.forEach(post => {
       const id = this.currentBlogPostId++;
-      this.blogPosts.set(id, { ...post, id, createdAt: new Date() });
+      this.blogPosts.set(id, { 
+        ...post, 
+        id, 
+        featured: post.featured || false,
+        views: Math.floor(Math.random() * 5000) + 500,
+        comments: Math.floor(Math.random() * 50) + 5,
+        likes: Math.floor(Math.random() * 200) + 10,
+        createdAt: new Date() 
+      });
     });
 
     // Initialize knowledge guides
@@ -349,7 +348,11 @@ export class MemStorage implements IStorage {
 
     expertData.forEach(expert => {
       const id = this.currentExpertId++;
-      this.experts.set(id, { ...expert, id });
+      this.experts.set(id, { 
+        ...expert, 
+        id,
+        rating: expert.rating || 5
+      });
     });
   }
 
@@ -431,6 +434,7 @@ export class MemStorage implements IStorage {
     const consultationRequest: ConsultationRequest = {
       ...request,
       id,
+      company: request.company || null,
       createdAt: new Date(),
     };
     this.consultationRequests.set(id, consultationRequest);

@@ -3,13 +3,14 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { useQuery } from "@tanstack/react-query";
 import type { BlogPostWithDetails } from "@shared/schema";
+import { formatDate } from "@/lib/utils";
 
 export default function BlogPost() {
   const [, params] = useRoute("/blog/:slug");
   const slug = params?.slug;
 
   const { data: post, isLoading, error } = useQuery<BlogPostWithDetails>({
-    queryKey: ["/api/blog-posts", slug],
+    queryKey: [`/api/blog-posts/${slug}`],
     enabled: !!slug,
   });
 
@@ -100,7 +101,7 @@ export default function BlogPost() {
               <div className="flex items-center space-x-6 text-sm text-gray-500">
                 <span>
                   <i className="fa fa-calendar-o mr-1"></i>
-                  {post.publishedAt.toLocaleDateString()}
+                  {formatDate(post.publishedAt)}
                 </span>
                 <span>
                   <i className="fa fa-clock-o mr-1"></i>
