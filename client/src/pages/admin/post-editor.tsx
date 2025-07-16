@@ -20,9 +20,9 @@ import type { BlogPost, BlogPostWithDetails, Category, Author } from "@shared/sc
 const postSchema = z.object({
   title: z.string().min(1, "Title is required"),
   slug: z.string().min(1, "Slug is required"),
-  excerpt: z.string().min(1, "Excerpt is required"),
+  excerpt: z.string().optional(),
   content: z.string().min(1, "Content is required"),
-  image: z.string().url("Must be a valid URL"),
+  image: z.string().url("Must be a valid URL").optional().or(z.literal("")),
   categoryId: z.number(),
   authorId: z.number(),
   readTime: z.number().min(1),
@@ -258,11 +258,11 @@ export default function PostEditor() {
                   </div>
 
                   <div>
-                    <Label htmlFor="excerpt">Excerpt</Label>
+                    <Label htmlFor="excerpt">Excerpt (optional)</Label>
                     <Textarea
                       id="excerpt"
                       {...form.register("excerpt")}
-                      placeholder="Brief description of the post"
+                      placeholder="Brief description of the post (optional)"
                       rows={3}
                     />
                     {form.formState.errors.excerpt && (
@@ -368,15 +368,15 @@ export default function PostEditor() {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Featured Image</CardTitle>
+                  <CardTitle>Featured Image (optional)</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div>
-                    <Label htmlFor="image">Image URL</Label>
+                    <Label htmlFor="image">Image URL (optional)</Label>
                     <Input
                       id="image"
                       {...form.register("image")}
-                      placeholder="https://example.com/image.jpg"
+                      placeholder="https://example.com/image.jpg (optional)"
                     />
                     {form.formState.errors.image && (
                       <p className="text-sm text-red-600 mt-1">

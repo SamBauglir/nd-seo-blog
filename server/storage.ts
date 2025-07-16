@@ -262,6 +262,8 @@ export class MemStorage implements IStorage {
       this.blogPosts.set(id, { 
         ...post, 
         id, 
+        excerpt: post.excerpt || null,
+        image: post.image || null,
         featured: post.featured || false,
         views: Math.floor(Math.random() * 5000) + 500,
         comments: Math.floor(Math.random() * 50) + 5,
@@ -473,6 +475,9 @@ export class MemStorage implements IStorage {
       createdAt: new Date(),
       featured: false,
       ...post,
+      excerpt: post.excerpt || null,
+      image: post.image || null,
+      publishedAt: new Date(post.publishedAt),
     };
     this.blogPosts.set(blogPost.id, blogPost);
     return blogPost;
@@ -485,6 +490,9 @@ export class MemStorage implements IStorage {
     const updatedPost: BlogPost = {
       ...existingPost,
       ...post,
+      excerpt: post.excerpt || null,
+      image: post.image || null,
+      publishedAt: new Date(post.publishedAt),
     };
     this.blogPosts.set(id, updatedPost);
     return updatedPost;
