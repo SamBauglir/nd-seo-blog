@@ -34,6 +34,39 @@ export default function Hero() {
               </a>
             </div>
             
+            {/* Narada Power Source Support Banner */}
+            <div className="bg-gradient-to-r from-blue-50 to-green-50 border border-blue-200 rounded-xl p-5 shadow-sm">
+              <div className="flex items-center space-x-4">
+                <div className="flex-shrink-0">
+                  <svg className="w-12 h-12" viewBox="0 0 120 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    {/* Narada Logo Design */}
+                    <rect x="0" y="0" width="120" height="50" rx="8" fill="url(#naradaGradient)"/>
+                    <defs>
+                      <linearGradient id="naradaGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#1E40AF"/>
+                        <stop offset="100%" stopColor="#3B82F6"/>
+                      </linearGradient>
+                    </defs>
+                    <text x="60" y="32" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold" fontFamily="Inter, system-ui">NARADA</text>
+                    <circle cx="15" cy="15" r="3" fill="#FBBF24"/>
+                    <circle cx="105" cy="35" r="2" fill="#10B981"/>
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center space-x-2 mb-1">
+                    <span className="text-sm font-semibold text-gray-800">Proudly supported by</span>
+                    <span className="text-sm font-bold text-[#165DFF]">Narada Power Source</span>
+                  </div>
+                  <p className="text-xs text-gray-600">Global leader in advanced energy storage solutions</p>
+                </div>
+                <div className="flex-shrink-0">
+                  <div className="flex space-x-1">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
+                  </div>
+                </div>
+              </div>
+            </div>
             
           </div>
           
