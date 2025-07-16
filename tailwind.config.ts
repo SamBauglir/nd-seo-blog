@@ -61,6 +61,15 @@ export default {
           border: "var(--sidebar-border)",
           ring: "var(--sidebar-ring)",
         },
+        // BESS design colors matching the HTML file
+        'bess-primary': '#165DFF',
+        'bess-secondary': '#36D399', 
+        'bess-dark': '#1E293B',
+        'bess-light': '#F8FAFC',
+      },
+      fontFamily: {
+        inter: ['Inter', 'sans-serif'],
+        roboto: ['Roboto', 'sans-serif'],
       },
       keyframes: {
         "accordion-down": {

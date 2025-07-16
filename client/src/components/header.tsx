@@ -29,45 +29,29 @@ export default function Header() {
 
   return (
     <header className="fixed w-full top-0 z-50 transition-all duration-300">
-      <nav className={`py-4 px-4 md:px-8 backdrop-blur-custom shadow-sm transition-all ${
-        scrolled ? "bg-white/95" : "bg-white/80"
-      }`}>
+      <nav className={`bg-white/90 backdrop-blur-sm shadow-sm py-4 px-4 md:px-8 transition-all`}>
         <div className="container mx-auto flex justify-between items-center">
-          {/* Logo */}
-          <a href="/" className="flex items-center space-x-3">
-            <div className="bg-gradient-to-br from-[#165DFF] to-[#165DFF]/80 text-white p-2.5 rounded-xl shadow-lg">
+          {/* Logo - Exact match from HTML file */}
+          <a href="/" className="flex items-center space-x-2">
+            <div className="bg-primary text-white p-2 rounded-lg">
               <i className="fa fa-bolt text-xl"></i>
             </div>
-            <div>
-              <span className="text-xl font-bold text-[#165DFF]">BESSEcho</span>
-              <p className="text-xs text-gray-500 hidden sm:block">Advanced BESS Knowledge Platform</p>
-            </div>
+            <span className="text-xl font-bold text-primary">BESSEcho</span>
           </a>
           
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <a 
-                key={item.href}
-                href={item.href} 
-                className="font-medium hover:text-[#165DFF] transition-colors relative group"
-              >
-                {item.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#165DFF] transition-all group-hover:w-full"></span>
-              </a>
-            ))}
-            <a 
-              href="#contact"
-              className="bg-[#165DFF] hover:bg-[#165DFF]/90 text-white font-medium py-2.5 px-6 rounded-lg transition-all shadow-lg hover:shadow-[#165DFF]/30"
-            >
-              Contact Experts
-            </a>
+          {/* Desktop Navigation - Exact match from HTML file */}
+          <div className="hidden md:flex items-center space-x-8">
+            <a href="/" className="font-medium hover:text-primary transition-colors">Home</a>
+            <a href="/blog" className="font-medium hover:text-primary transition-colors">Blog</a>
+            <a href="/knowledge" className="font-medium hover:text-primary transition-colors">Knowledge</a>
+            <a href="#inquire" className="font-medium hover:text-primary transition-colors">Inquire</a>
+            <a href="#contact" className="font-medium hover:text-primary transition-colors">Contact</a>
           </div>
           
           {/* Mobile Menu Button */}
           <button 
             onClick={toggle}
-            className="lg:hidden text-gray-700 focus:outline-none"
+            className="md:hidden text-dark focus:outline-none"
           >
             <i className="fa fa-bars text-2xl"></i>
           </button>
@@ -75,25 +59,15 @@ export default function Header() {
       </nav>
       
       {/* Mobile Navigation Menu */}
-      <div className={`lg:hidden bg-white/95 backdrop-blur-custom shadow-lg absolute w-full transition-all ${
+      <div className={`md:hidden bg-white shadow-lg absolute w-full transition-all ${
         isOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none"
       }`}>
-        <div className="container mx-auto py-6 px-4 flex flex-col space-y-4">
-          {navItems.map((item) => (
-            <a 
-              key={item.href}
-              href={item.href} 
-              className="font-medium hover:text-[#165DFF] transition-colors py-2"
-            >
-              {item.label}
-            </a>
-          ))}
-          <a 
-            href="#contact"
-            className="font-medium hover:text-[#165DFF] transition-colors py-2"
-          >
-            Contact Experts
-          </a>
+        <div className="container mx-auto py-4 px-4 flex flex-col space-y-4">
+          <a href="/" className="font-medium hover:text-primary transition-colors py-2">Home</a>
+          <a href="/blog" className="font-medium hover:text-primary transition-colors py-2">Blog</a>
+          <a href="/knowledge" className="font-medium hover:text-primary transition-colors py-2">Knowledge</a>
+          <a href="#inquire" className="font-medium hover:text-primary transition-colors py-2">Inquire</a>
+          <a href="#contact" className="font-medium hover:text-primary transition-colors py-2">Contact</a>
         </div>
       </div>
     </header>
