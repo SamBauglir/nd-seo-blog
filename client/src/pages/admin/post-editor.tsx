@@ -14,6 +14,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import RichTextEditor from "@/components/ui/rich-text-editor";
+import { editorJSToHTML, htmlToEditorJS } from "@/utils/editorjs-to-html";
 import type { BlogPost, BlogPostWithDetails, Category, Author } from "@shared/schema";
 
 const postSchema = z.object({
@@ -71,11 +72,14 @@ export default function PostEditor() {
 
   useEffect(() => {
     if (post && isEditMode) {
+      // Convert HTML content back to EditorJS format for editing
+      const editorContent = htmlToEditorJS(post.content);
+      
       form.reset({
         title: post.title,
         slug: post.slug,
         excerpt: post.excerpt,
-        content: post.content,
+        content: JSON.stringify(editorContent),
         image: post.image,
         categoryId: post.categoryId,
         authorId: post.authorId,
@@ -100,8 +104,20 @@ export default function PostEditor() {
 
   const createMutation = useMutation({
     mutationFn: async (data: PostFormData) => {
+      // Convert EditorJS data to HTML for storage
+      let htmlContent = data.content;
+      try {
+        const editorData = JSON.parse(data.content);
+        if (editorData.blocks) {
+          htmlContent = editorJSToHTML(editorData);
+        }
+      } catch {
+        // If it's already HTML, keep as is
+      }
+      
       const response = await apiRequest("POST", "/api/blog-posts", {
         ...data,
+        content: htmlContent,
         publishedAt: new Date(data.publishedAt),
       });
       return response.json();
@@ -122,8 +138,20 @@ export default function PostEditor() {
 
   const updateMutation = useMutation({
     mutationFn: async (data: PostFormData) => {
+      // Convert EditorJS data to HTML for storage
+      let htmlContent = data.content;
+      try {
+        const editorData = JSON.parse(data.content);
+        if (editorData.blocks) {
+          htmlContent = editorJSToHTML(editorData);
+        }
+      } catch {
+        // If it's already HTML, keep as is
+      }
+      
       const response = await apiRequest("PUT", `/api/blog-posts/${postId}`, {
         ...data,
+        content: htmlContent,
         publishedAt: new Date(data.publishedAt),
       });
       return response.json();

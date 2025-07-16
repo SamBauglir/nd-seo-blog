@@ -1,13 +1,17 @@
-import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import { Button } from '@/components/ui/button';
-import { 
-  Bold, Italic, Strikethrough, Code, 
-  List, ListOrdered, Quote, Minus, Undo, Redo, 
-  AlignLeft, AlignCenter, AlignRight, AlignJustify,
-  Heading1, Heading2, Heading3, Link as LinkIcon, Image as ImageIcon
-} from 'lucide-react';
-import { useCallback } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
+import EditorJS, { OutputData } from '@editorjs/editorjs';
+import Header from '@editorjs/header';
+import List from '@editorjs/list';
+import Paragraph from '@editorjs/paragraph';
+import Delimiter from '@editorjs/delimiter';
+import Table from '@editorjs/table';
+import Code from '@editorjs/code';
+import Quote from '@editorjs/quote';
+import Marker from '@editorjs/marker';
+import InlineCode from '@editorjs/inline-code';
+import LinkTool from '@editorjs/link';
+import ImageTool from '@editorjs/image';
+import Checklist from '@editorjs/checklist';
 
 interface RichTextEditorProps {
   content: string;
@@ -16,192 +20,136 @@ interface RichTextEditorProps {
 }
 
 export default function RichTextEditor({ content, onChange, placeholder }: RichTextEditorProps) {
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-    ],
-    content,
-    onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
-    },
-    editorProps: {
-      attributes: {
-        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[200px] p-4 border rounded-md',
+  const editorRef = useRef<EditorJS | null>(null);
+  const holderRef = useRef<HTMLDivElement>(null);
+
+  const initializeEditor = useCallback(async () => {
+    if (!holderRef.current) return;
+
+    // Parse existing content
+    let initialData: OutputData;
+    try {
+      initialData = content ? JSON.parse(content) : { blocks: [] };
+    } catch {
+      // If content is HTML string, convert to simple paragraph
+      initialData = {
+        blocks: content ? [{
+          type: 'paragraph',
+          data: { text: content }
+        }] : []
+      };
+    }
+
+    const editor = new EditorJS({
+      holder: holderRef.current,
+      placeholder: placeholder || 'Start writing your content...',
+      data: initialData,
+      tools: {
+        header: {
+          class: Header,
+          config: {
+            levels: [1, 2, 3, 4],
+            defaultLevel: 2
+          }
+        },
+        paragraph: {
+          class: Paragraph,
+          inlineToolbar: true
+        },
+        list: {
+          class: List,
+          inlineToolbar: true,
+          config: {
+            defaultStyle: 'unordered'
+          }
+        },
+        checklist: {
+          class: Checklist,
+          inlineToolbar: true
+        },
+        quote: {
+          class: Quote,
+          inlineToolbar: true,
+          config: {
+            quotePlaceholder: 'Enter a quote',
+            captionPlaceholder: 'Quote\'s author'
+          }
+        },
+        code: {
+          class: Code,
+          config: {
+            placeholder: 'Enter code here...'
+          }
+        },
+        table: {
+          class: Table,
+          inlineToolbar: true,
+          config: {
+            rows: 2,
+            cols: 3
+          }
+        },
+        delimiter: Delimiter,
+        marker: {
+          class: Marker,
+          shortcut: 'CMD+SHIFT+M'
+        },
+        inlineCode: {
+          class: InlineCode,
+          shortcut: 'CMD+SHIFT+C'
+        },
+        linkTool: {
+          class: LinkTool,
+          config: {
+            endpoint: '/api/link-preview' // You can implement this endpoint later
+          }
+        },
+        image: {
+          class: ImageTool,
+          config: {
+            endpoints: {
+              byFile: '/api/upload-image', // You can implement this endpoint later
+              byUrl: '/api/fetch-image'
+            }
+          }
+        }
       },
-    },
-  });
+      onChange: async () => {
+        if (editorRef.current) {
+          try {
+            const outputData = await editorRef.current.save();
+            onChange(JSON.stringify(outputData));
+          } catch (error) {
+            console.error('Saving failed:', error);
+          }
+        }
+      }
+    });
 
-  const setLink = useCallback(() => {
-    if (!editor) return;
-    
-    const previousUrl = editor.getAttributes('link').href;
-    const url = window.prompt('Enter URL:', previousUrl);
+    editorRef.current = editor;
+  }, [content, onChange, placeholder]);
 
-    if (url === null) return;
+  useEffect(() => {
+    initializeEditor();
 
-    if (url === '') {
-      editor.chain().focus().extendMarkRange('link').unsetLink().run();
-      return;
-    }
-
-    editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
-  }, [editor]);
-
-  const addImage = useCallback(() => {
-    if (!editor) return;
-    
-    const url = window.prompt('Enter image URL:');
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
-    }
-  }, [editor]);
-
-  if (!editor) {
-    return null;
-  }
+    return () => {
+      if (editorRef.current) {
+        editorRef.current.destroy();
+        editorRef.current = null;
+      }
+    };
+  }, [initializeEditor]);
 
   return (
     <div className="border rounded-lg overflow-hidden">
-      {/* Toolbar */}
-      <div className="border-b bg-gray-50 dark:bg-gray-800 p-2 flex flex-wrap gap-1">
-        {/* Text Formatting */}
-        <div className="flex gap-1 border-r pr-2 mr-2">
-          <Button
-            size="sm"
-            variant={editor.isActive('bold') ? 'default' : 'ghost'}
-            onClick={() => editor.chain().focus().toggleBold().run()}
-          >
-            <Bold className="h-4 w-4" />
-          </Button>
-          <Button
-            size="sm"
-            variant={editor.isActive('italic') ? 'default' : 'ghost'}
-            onClick={() => editor.chain().focus().toggleItalic().run()}
-          >
-            <Italic className="h-4 w-4" />
-          </Button>
-          <Button
-            size="sm"
-            variant={editor.isActive('strike') ? 'default' : 'ghost'}
-            onClick={() => editor.chain().focus().toggleStrike().run()}
-          >
-            <Strikethrough className="h-4 w-4" />
-          </Button>
-          <Button
-            size="sm"
-            variant={editor.isActive('code') ? 'default' : 'ghost'}
-            onClick={() => editor.chain().focus().toggleCode().run()}
-          >
-            <Code className="h-4 w-4" />
-          </Button>
-        </div>
-
-        {/* Headings */}
-        <div className="flex gap-1 border-r pr-2 mr-2">
-          <Button
-            size="sm"
-            variant={editor.isActive('heading', { level: 1 }) ? 'default' : 'ghost'}
-            onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-          >
-            <Heading1 className="h-4 w-4" />
-          </Button>
-          <Button
-            size="sm"
-            variant={editor.isActive('heading', { level: 2 }) ? 'default' : 'ghost'}
-            onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          >
-            <Heading2 className="h-4 w-4" />
-          </Button>
-          <Button
-            size="sm"
-            variant={editor.isActive('heading', { level: 3 }) ? 'default' : 'ghost'}
-            onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-          >
-            <Heading3 className="h-4 w-4" />
-          </Button>
-        </div>
-
-        {/* Lists */}
-        <div className="flex gap-1 border-r pr-2 mr-2">
-          <Button
-            size="sm"
-            variant={editor.isActive('bulletList') ? 'default' : 'ghost'}
-            onClick={() => editor.chain().focus().toggleBulletList().run()}
-          >
-            <List className="h-4 w-4" />
-          </Button>
-          <Button
-            size="sm"
-            variant={editor.isActive('orderedList') ? 'default' : 'ghost'}
-            onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          >
-            <ListOrdered className="h-4 w-4" />
-          </Button>
-          <Button
-            size="sm"
-            variant={editor.isActive('blockquote') ? 'default' : 'ghost'}
-            onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          >
-            <Quote className="h-4 w-4" />
-          </Button>
-        </div>
-
-        {/* Media & Links */}
-        <div className="flex gap-1 border-r pr-2 mr-2">
-          <Button
-            size="sm"
-            variant={editor.isActive('link') ? 'default' : 'ghost'}
-            onClick={setLink}
-          >
-            <LinkIcon className="h-4 w-4" />
-          </Button>
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={addImage}
-          >
-            <ImageIcon className="h-4 w-4" />
-          </Button>
-        </div>
-
-        {/* Misc */}
-        <div className="flex gap-1 border-r pr-2 mr-2">
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => editor.chain().focus().setHorizontalRule().run()}
-          >
-            <Minus className="h-4 w-4" />
-          </Button>
-        </div>
-
-        {/* Undo/Redo */}
-        <div className="flex gap-1">
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => editor.chain().focus().undo().run()}
-            disabled={!editor.can().undo()}
-          >
-            <Undo className="h-4 w-4" />
-          </Button>
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => editor.chain().focus().redo().run()}
-            disabled={!editor.can().redo()}
-          >
-            <Redo className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
-
-      {/* Editor Content */}
-      <div className="min-h-[300px]">
-        <EditorContent 
-          editor={editor} 
-        />
-      </div>
+      <div 
+        ref={holderRef}
+        className="min-h-[400px] p-4 prose prose-sm sm:prose lg:prose-lg max-w-none"
+        style={{
+          fontSize: '16px',
+          lineHeight: '1.6'
+        }}
+      />
     </div>
   );
 }
